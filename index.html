@@ -13,10 +13,11 @@
     />
   </head>
   <body>
+    <div class="snow" aria-hidden="true"></div>
     <div class="app">
       <header class="app__header">
-        <h1>Cut The Carrot</h1>
-        <p>Slice, weigh, and win with the smallest score.</p>
+        <h1>Cut The Carrot: Jingle Slice Showdown</h1>
+        <p>Bundle up, slice, and win with the tiniest difference.</p>
       </header>
 
       <main>
@@ -63,6 +64,34 @@
                   stroke-linecap="round"
                   fill="none"
                 />
+                <g transform="translate(12 116)">
+                  <circle cx="44" cy="38" r="16" fill="#ffe3d1" />
+                  <path
+                    d="M26 76c8-20 40-24 56 0v18H26z"
+                    fill="#4fb477"
+                  />
+                  <path
+                    d="M36 52c10 10 20 10 30 0"
+                    fill="none"
+                    stroke="#f76f00"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  />
+                </g>
+                <g transform="translate(210 110)">
+                  <circle cx="44" cy="38" r="16" fill="#ffd8c2" />
+                  <path
+                    d="M26 76c8-20 40-24 56 0v18H26z"
+                    fill="#d35b5b"
+                  />
+                  <path
+                    d="M34 46c10-6 22-6 32 0"
+                    fill="none"
+                    stroke="#3c9f48"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  />
+                </g>
               </svg>
             </div>
             <div class="splash__content">
@@ -70,6 +99,16 @@
               <p>
                 Take turns cutting your carrot in half. The smallest percentage difference wins.
               </p>
+              <div class="splash__story">
+                <div class="splash__story-card">
+                  <h3>Carrot Carolers</h3>
+                  <p>Bundle up with a merry crew and cheer every tiny slice.</p>
+                </div>
+                <div class="splash__story-card">
+                  <h3>Snowy Showdowns</h3>
+                  <p>Log each weight and watch the leaderboard sparkle.</p>
+                </div>
+              </div>
               <button class="btn btn--primary" data-action="start-setup">Play</button>
             </div>
           </div>
@@ -77,8 +116,10 @@
 
         <section class="screen" data-screen="setup">
           <div class="panel">
-            <h2>Add Players</h2>
-            <p class="panel__subtitle">Enter each player and their whole carrot weight.</p>
+            <h2>Add Players to the Sleigh</h2>
+            <p class="panel__subtitle">
+              Enter each player and their whole carrot weight for the holiday showdown.
+            </p>
             <form class="form" data-form="player">
               <label>
                 Player name
@@ -107,7 +148,7 @@
 
         <section class="screen" data-screen="turnIntro">
           <div class="panel panel--center">
-            <h2>Next up</h2>
+            <h2>Next up on the cutting board</h2>
             <div class="turn-card">
               <p class="turn-card__label">Player</p>
               <p class="turn-card__name" data-current-player></p>
@@ -136,7 +177,7 @@
 
         <section class="screen" data-screen="leaderboard">
           <div class="panel">
-            <h2>Leaderboard</h2>
+            <h2>Snowy Leaderboard</h2>
             <p class="panel__subtitle" data-leaderboard-subtitle></p>
             <div class="leaderboard" data-leaderboard></div>
             <div class="panel__actions">
@@ -155,6 +196,7 @@
         </section>
       </main>
     </div>
+    <div class="fireworks" data-fireworks aria-hidden="true"></div>
 
     <script src="app.js"></script>
   </body>

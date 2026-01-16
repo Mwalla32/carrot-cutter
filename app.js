@@ -5,6 +5,7 @@ const podiumEl = document.querySelector("[data-podium]");
 const currentPlayerEl = document.querySelector("[data-current-player]");
 const weighSubtitleEl = document.querySelector("[data-weigh-subtitle]");
 const leaderboardSubtitleEl = document.querySelector("[data-leaderboard-subtitle]");
+const fireworksEl = document.querySelector("[data-fireworks]");
 
 const state = {
   players: [],
@@ -50,7 +51,7 @@ const setTurnIntro = () => {
   if (!player) return;
 
   currentPlayerEl.textContent = player.name;
-  weighSubtitleEl.textContent = `Whole carrot weight: ${player.wholeWeight} g`;
+  weighSubtitleEl.textContent = `Whole carrot weight: ${player.wholeWeight} g (holiday harvest)`;
 };
 
 const calculateScore = (halfA, halfB, wholeWeight) => {
@@ -135,6 +136,64 @@ const updatePodium = () => {
   });
 };
 
+const launchFireworks = () => {
+  if (!fireworksEl) return;
+  const colors = ["#f5c86b", "#d84b3a", "#2f8f4e", "#7cc6ff", "#f29fb1"];
+  const bursts = 8;
+
+  for (let i = 0; i < bursts; i += 1) {
+    const firework = document.createElement("div");
+    firework.className = "firework";
+    firework.style.left = `${10 + Math.random() * 80}%`;
+    firework.style.top = `${10 + Math.random() * 60}%`;
+    firework.style.color = colors[Math.floor(Math.random() * colors.length)];
+    firework.style.animationDelay = `${Math.random() * 0.3}s`;
+    fireworksEl.appendChild(firework);
+
+    firework.addEventListener(
+      "animationend",
+      () => {
+        firework.remove();
+      },
+      { once: true }
+    );
+  }
+};
+
+const playCelebrationSound = () => {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+  const audioContext = new AudioContextClass();
+  const now = audioContext.currentTime;
+  const notes = [
+    { freq: 523.25, start: 0, duration: 0.16 },
+    { freq: 659.25, start: 0.18, duration: 0.16 },
+    { freq: 783.99, start: 0.36, duration: 0.2 },
+    { freq: 987.77, start: 0.62, duration: 0.3 },
+  ];
+
+  notes.forEach((note) => {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.type = "triangle";
+    oscillator.frequency.value = note.freq;
+    gainNode.gain.setValueAtTime(0.001, now + note.start);
+    gainNode.gain.exponentialRampToValueAtTime(0.2, now + note.start + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.001,
+      now + note.start + note.duration
+    );
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.start(now + note.start);
+    oscillator.stop(now + note.start + note.duration);
+  });
+
+  setTimeout(() => {
+    audioContext.close();
+  }, 1200);
+};
+
 const resetGame = () => {
   state.players = [];
   state.currentIndex = 0;
@@ -188,8 +247,8 @@ weighForm.addEventListener("submit", (event) => {
 
   const isLast = state.currentIndex >= state.players.length - 1;
   leaderboardSubtitleEl.textContent = isLast
-    ? "All carrots are weighed!"
-    : `${player.name}'s score is in. Ready for the next slice?`;
+    ? "All carrots are weighed! Time for the sparkle finale."
+    : `${player.name}'s score is in. Ready for the next snow-slice?`;
 
   const nextButton = document.querySelector("[data-action='next-turn']");
   const podiumButton = document.querySelector("[data-action='show-podium']");
@@ -222,6 +281,8 @@ document.body.addEventListener("click", (event) => {
       break;
     case "show-podium":
       updatePodium();
+      playCelebrationSound();
+      launchFireworks();
       showScreen("podium");
       break;
     case "restart":
